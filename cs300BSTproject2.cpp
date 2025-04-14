@@ -118,7 +118,17 @@ void searchCourse(courseNode* courseNode, const std::string& targetID) {
 	}
 }
 
-//known bug, dont use text when interecting with the menu. It dones't have sanitation built in and will get stuck in an infinite loop.
+// ease of life function to convert a string to uppercase so seaching courses isn't so painful
+std::string toUpperAlpha(const std::string& input) {
+	std::string result = input;
+	for (char& c : result) {
+		if (std::isalpha(static_cast<unsigned char>(c))) {
+			c = std::toupper(static_cast<unsigned char>(c));
+		}
+	}
+	return result;
+}
+
 int main()
 {
 	// initialzing static vars
@@ -136,6 +146,16 @@ int main()
 		std::cout << "9 - Exit\n";
 		std::cout << "Enter your choice: ";
 		std::cin >> choice;
+		
+		// Check for invalid input
+		if (std::cin.fail()) {
+			std::cin.clear(); // Clear error flag
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Remove invalid input
+			std::cout << "Invalid input. Please enter a valid number.\n";
+			choice = -1; // Set to invalid option to continue the loop
+			continue;
+		}
+
 		switch (choice) {
 		case 1:
 			myDataStructure = readFile(fileName);
@@ -148,7 +168,7 @@ int main()
 			std::string targetID;
 			std::cout << "Enter Course ID to search for: ";
 			std::cin >> targetID;
-			searchCourse(myDataStructure, targetID);
+			searchCourse(myDataStructure, toUpperAlpha(targetID)); // convert to uppercase targetID and passes result instead of literal value.
 			break;
 		}
 		case 9:
@@ -156,7 +176,6 @@ int main()
 			break;
 		default:
 			std::cout << "Invalid option. Please try again.\n";
-			
 		}
 	} while (choice != 9);
 	return 0;
