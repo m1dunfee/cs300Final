@@ -1,0 +1,10 @@
+# Visual Studio project files
+*.vs\*
+# .NET build outputs
+/bin/*
+/obj/*
+# NuGet packages
+/packages/*
+# Other common exclusions
+*.suo
+*.user
